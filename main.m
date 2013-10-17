@@ -17,20 +17,17 @@ classes = {
 };
 nClasses = numel(classes);
 
-
 nFeatures = 20;
 % for the sake of laziness below
 x = zeros(data.n,nFeatures);
 y = zeros(data.n,1);
 
-
-
 %%
-for i = 1:numel(lines{1})
-    line = lines{1}(i);
-    class_cell = lines{2}(i);
-    disp(line{1}(max(strfind(line{1},'/'))+1:end));    % Display current file
-    y(i) = find(strcmp(classes,class_cell{1}));
+for i = 1:numel(data.n)
+    disp(data.files{i}(numel(data.path)+1:end));    % Display current file
+    %% Set up truth
+    y(i) = find(strcmp(data.files{i}(numel(data.path)+1:numel(data.path)+3),classes));
+    
     track = wavread(line{1}); % Stereo track
     track_mono = sum(track,2);
     nF=1;
