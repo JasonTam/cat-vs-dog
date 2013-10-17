@@ -1,0 +1,115 @@
+%%
+data.path = './data/';
+data.dir = dir(fullfile(strcat(data.path,'*.jpg')));
+data.cell = struct2cell(data.dir);
+
+classes = {
+    'cat'   % 1
+    'dog'	% 2
+};
+
+nClasses = 2;
+
+
+nFeatures = 293;
+% for the sake of laziness below
+x = zeros(numel(lines{1}),nFeatures);
+y = zeros(numel(lines{1}),1);
+
+%%
+for i = 1:numel(lines{1})
+    line = lines{1}(i);
+    class_cell = lines{2}(i);
+    disp(line{1}(max(strfind(line{1},'/'))+1:end));    % Display current file
+    y(i) = find(strcmp(classes,class_cell{1}));
+    track = wavread(line{1}); % Stereo track
+    track_mono = sum(track,2);
+    nF=1;
+    
+    %Seperation
+%     [u n] = seperate(track_mono,gamma{i});
+    
+    % Establishing Features
+    
+% dwt coefficients
+%     [x(i,nF:nF+300-1) x(i,nF+300:nF+600-1) ~] = getWavletFeature(track_mono);
+%     nF = nF+600;
+
+
+% for both subband and time
+% subband % this is the one I expect to work
+% nFdwt = 4415; % 4410 for haar
+%     [x(i,nF:nF+nFdwt-1) x(i,nF+nFdwt:nF+2*nFdwt-1) ~] = getWavletSubbandFeature(track_mono);
+%     nF = nF + 2*nFdwt;
+    %time % I have no idea why this works
+%     [x(i,nF:nF+300-1) x(i,nF+300:nF+600-1) ~] = getWavletTemporalFeature(track_mono);
+%     nF = nF+600;
+
+
+
+% Wavedec %50**************************
+    x(i,nF:nF+160-1) = getWavedecFeature(track_mono);
+    nF = nF+160;
+
+end
+
+%%
+dataSet = prtDataSetClass(x,y);
+dataSet = dataSet.setClassNames(classes);
+% plot(dataSet);
+
+%%
+% % % 
+if 0
+    pca = prtPreProcPca;      % Create a prtPreProcPca object
+    pca.nComponents = 3;      % nComponents is a field of prtPreProcPca objects
+    pca = pca.train(dataSet); % Outputs a pca object with pcaVectors set
+    pca = pca.run(dataSet); 
+    % 
+    % plot the data.
+    % figure(1); plot(dataSet);
+    % figure(2); plot(pca);
+end
+%%
+% Classifier = prtClassMap;
+Classifier = prtClassBinaryToMaryOneVsAll;
+% Classifier = prtClassMatlabTreeBagger;
+% Classifier = prtClassMatlabNnet;
+% Classifier = prtClassTreeBaggingCap;
+Classifier.baseClassifier = prtClassAdaBoost;         
+% Classifier.baseClassifier = prtClassSvm;
+% Classifier.baseClassifier = prtClassLibSvm;
+% Classifier.baseClassifier = prtClassRvm;
+
+
+% Classifier.baseClassifier = prtClassLogisticDiscriminant;
+
+% Classifier = Classifier.train(pca);
+Classifier = Classifier.train(dataSet);
+% plot(Classifier)
+
+%%
+% try computing 3 classifiers every time
+% truth = dsPca.getTargets; %the true class labels
+truth = dataSet.getTargets; %the true class labels
+yOutKfolds = Classifier.kfolds(dataSet,5); %10-Fold cross-validation
+
+%We need to parse the output of the KNN classifier to turn vote counts into
+%class guesses - for each observation, our guess is the column with the
+%most votes!
+[nVotes,guess] = max(yOutKfolds.getObservations,[],2);
+
+subplot(1,1,1); %don't plot in the last figure window.
+confusion = prtScoreConfusionMatrix(guess,truth,dataSet.uniqueClasses,dataSet.getClassNames);
+prtScoreConfusionMatrix(guess,truth,dataSet.uniqueClasses,dataSet.getClassNames);
+disp('% Correct:');
+sum(diag(confusion))
+title('Classification Confusion Matrix');
+
+%%
+
+save('most_recent_workspace')
+
+
+
+
