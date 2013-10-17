@@ -23,18 +23,18 @@ x = zeros(data.n,nFeatures);
 y = zeros(data.n,1);
 
 %%
-for i = 1:numel(data.n)
+for i = 1:data.n
     disp(data.files{i}(numel(data.path)+1:end));    % Display current file
     %% Set up truth
     y(i) = find(strcmp(data.files{i}(numel(data.path)+1:numel(data.path)+3),classes));
     
-    track = wavread(line{1}); % Stereo track
-    track_mono = sum(track,2);
-    nF=1;
-    
-%     Get some Features
-    x(i,nF:nF+160-1) = getWavedecFeature(track_mono);
-    nF = nF+160;
+%     track = wavread(line{1}); % Stereo track
+%     track_mono = sum(track,2);
+%     nF=1;
+%     
+% %     Get some Features
+%     x(i,nF:nF+160-1) = getWavedecFeature(track_mono);
+%     nF = nF+160;
 
 end
 
