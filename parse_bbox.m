@@ -3,10 +3,15 @@
 % MaKeene Learning
 % Cats vs Dogs
 % -------------------------------
+function [ anno ] = parse_bbox( whichPath )
+%PARSE_BBOX Returns annotation structures
+%   'whichPath' : the directory (WNID) of annotation xml files to extract
+
+if nargin<1; whichPath = 'n02084071'; end;
 
 addpath(genpath('./toolbox_ext'));
 %% 
-anno.path = strcat(getPath('imagenet'),'Annotation/n02084071/');
+anno.path = strcat(getPath('imagenet'),'Annotation/',whichPath,'/');
 
 anno.dir = dir(fullfile(strcat(anno.path,'*.xml')));
 anno.cell = struct2cell(anno.dir);
@@ -15,8 +20,6 @@ anno.n = numel(anno.files);
 
 anno.data = cell(anno.n,1);
 
-scalebbox = @(bbox,imgsize) bbox./...
-    [imgsize(2) imgsize(1) imgsize(2) imgsize(1)];
 %% Go through each xml file to get bounding box info
 for i = 1:anno.n
     qq = VOCreadrecxml(anno.files{i});
@@ -35,5 +38,5 @@ for i = 1:anno.n
     
 end
 
-
+end
 
