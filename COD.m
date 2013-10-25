@@ -23,21 +23,26 @@ anno_cat = parse_bbox(dir_cat);
 % positiveinstances needs to be in a specific form
 % .imageFilename : string for image file name
 % .objectBoundingBoxes : Mx4 matric of M bounding boxes
+% bounding boxes are i nthe form: [x y width height]
 
 % TODO (maybe): A bit tedious, but we will manually scour the images
 % Incase the image size is not consistent with the database
 rowHeadings = {'imageFilename', 'objectBoundingBoxes'};
+
 q = cell2mat(anno_dog.data);
+ind_name = strcmp(fieldnames(q),'name');    % index of the name field
+ind_bbox = strcmp(fieldnames(q),'bbox');    % index of the bbox field
+
 qc = struct2cell(q);
-diF = strcat(imDir_dog,qc(1,:),'.jpg');
-doBB = qc(3,:);
+diF = strcat(imDir_dog,qc(ind_name,:),'.JPEG');
+doBB = qc(ind_bbox,:);
 D = [diF;doBB];
 data_dog = cell2struct(D, rowHeadings, 1);
 
 q = cell2mat(anno_cat.data);
 qc = struct2cell(q);
-diF = strcat(imDir_cat,qc(1,:),'.jpg');
-doBB = qc(3,:);
+diF = strcat(imDir_cat,qc(ind_name,:),'.JPEG');
+doBB = qc(ind_bbox,:);
 D = [diF;doBB];
 data_cat = cell2struct(D, rowHeadings, 1);
 
