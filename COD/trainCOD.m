@@ -1,4 +1,4 @@
-% Cascade Object Detector
+% Train a Cascade Object Detector
 
 %% Pathing
 addpath(genpath('../'));
