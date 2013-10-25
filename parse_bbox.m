@@ -21,6 +21,7 @@ anno.n = numel(anno.files);
 anno.data = cell(anno.n,1);
 
 %% Go through each xml file to get bounding box info
+h = waitbar(0,strcat('Extracting Data from:/', whichPath));
 for i = 1:anno.n
     qq = VOCreadrecxml(anno.files{i});
     anno.data{i}.name = qq.filename;
@@ -35,8 +36,9 @@ for i = 1:anno.n
     anno.data{i}.bbox_norm = anno.data{i}.bbox./...
         repmat(fliplr(anno.data{i}.imgsize(1:2)),[size(anno.data{i}.bbox,1) 2]);
     
-    
+    waitbar(i / anno.n);
 end
+close(h)
 
 end
 
