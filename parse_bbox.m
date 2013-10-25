@@ -27,7 +27,7 @@ for i = 1:anno.n
     ind_obj = strcmp(fieldnames(qq.objects),'bbox');
     q_obj = struct2cell(qq.objects);
     % [xmin ymin xmax ymax] each row of these is a seperate bbox
-    anno.data{i}.bbox = squeeze(cell2mat(q_obj(ind_obj,1,:)))';
+    anno.data{i}.bbox = shiftdim(cell2mat(q_obj(ind_obj,1,:)),1)';
     % Scale bbox to imgsize (incase sizes don't match with actual image)
     anno.data{i}.bbox_norm = anno.data{i}.bbox./...
         repmat(fliplr(anno.data{i}.imgsize(1:2)),[size(anno.data{i}.bbox,1) 2]);
