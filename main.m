@@ -5,9 +5,7 @@
 % -------------------------------
 
 %% 
-% data.path = './data/';
-% data.path = '/afs/ee.cooper.edu/user/t/a/tam8/AFS_drop/CATSnDOGS/train/';
-data.path = '/afs/ee.cooper.edu/user/l/i/li14/AFSdrop/CATSnDOGS/train/';
+data.path = strcat(getPath,'train/');
 
 data.dir = dir(fullfile(strcat(data.path,'*.jpg')));
 data.cell = struct2cell(data.dir);
