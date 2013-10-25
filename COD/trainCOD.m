@@ -1,6 +1,7 @@
 % Cascade Object Detector
 
 %% Pathing
+addpath(genpath('../'));
 dir_dog = 'n02084071';
 dir_cat = 'n02121620';
 
@@ -49,10 +50,11 @@ data_cat = cell2struct(D, rowHeadings, 1);
 
 %% Train Cascade Object Detector
 %% DOGE
-trainCascadeObjectDetector('dogDetector.xml',...
+
+trainCascadeObjectDetector(strcat(dir_dog,'.xml'),...
     data_dog,negativeFolder,'FalseAlarmRate',0.2,'NumCascadeStages',5);
 %% CATE
-trainCascadeObjectDetector('catDetector.xml',...
+trainCascadeObjectDetector(strcat(dir_cat,'.xml'),...
     data_cat,negativeFolder,'FalseAlarmRate',0.2,'NumCascadeStages',5);
 
 

@@ -31,7 +31,8 @@ for i = 1:anno.n
     ind_obj = strcmp(fieldnames(qq.objects),'bbox');
     q_obj = struct2cell(qq.objects);
     % [xmin ymin xmax ymax] each row of these is a seperate bbox
-    anno.data{i}.bbox2 = shiftdim(cell2mat(q_obj(ind_obj,1,:)),1)';
+    % Add 1 because matlab is 1 indexed
+    anno.data{i}.bbox2 = 1+shiftdim(cell2mat(q_obj(ind_obj,1,:)),1)';
     
     % Need to convert to [x y width height]
     anno.data{i}.bbox = ...
