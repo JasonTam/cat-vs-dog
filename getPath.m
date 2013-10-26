@@ -5,13 +5,18 @@ function [ thePath ] = getPath( whichPath )
 
 if nargin<1; whichPath = 'data'; end;
 
+base = '/afs/ee.cooper.edu/user/l/i/li14/AFSdrop/CATSnDOGS/';
+
 switch whichPath
     case 'data'
-        thePath = '/afs/ee.cooper.edu/user/l/i/li14/AFSdrop/CATSnDOGS/';
+        thePath = base;
     case 'imagenet'
-        thePath = '/afs/ee.cooper.edu/user/l/i/li14/AFSdrop/CATSnDOGS/external_data/imagenet/';
+        sub = 'external_data/imagenet/';
+        thePath = fullfile(base,sub);
+    case 'oxford'
+        sub = 'external_data/oxford/';
+        thePath = fullfile(base,sub);
 end
-
 
 
 end

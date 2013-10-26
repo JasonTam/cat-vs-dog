@@ -7,12 +7,13 @@ function [ anno ] = parse_bbox( whichPath )
 %PARSE_BBOX Returns annotation structures
 %   'whichPath' : the directory (WNID) of annotation xml files to extract
 
-if nargin<1; whichPath = 'n02084071'; end;
+if nargin<1
+    whichPath = strcat(getPath('imagenet'),'Annotation/n02084071/');
+end;
 
 addpath(genpath('./toolbox_ext'));
 %% 
-anno.path = strcat(getPath('imagenet'),'Annotation/',whichPath,'/');
-
+anno.path = whichPath;
 anno.dir = dir(fullfile(strcat(anno.path,'*.xml')));
 anno.cell = struct2cell(anno.dir);
 anno.files = strcat(anno.path,anno.cell(1,:))';

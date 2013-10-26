@@ -17,8 +17,11 @@ addpath(imDir_cat);
 negativeFolder = fullfile(matlabroot,'toolbox','vision','visiondemos','non_stop_signs');
 
 %% Parse XML data
-anno_dog = parse_bbox(dir_dog);
-anno_cat = parse_bbox(dir_cat);
+annoPath_dog = strcat(getPath('imagenet'),'Annotation/',dir_dog,'/');
+annoPath_cat = strcat(getPath('imagenet'),'Annotation/',dir_cat,'/');
+
+anno_dog = parse_bbox(annoPath_dog);
+anno_cat = parse_bbox(annoPath_cat);
 
 %% Form fit data
 % positiveinstances needs to be in a specific form

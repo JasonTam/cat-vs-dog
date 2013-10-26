@@ -21,7 +21,7 @@ bboxes = step(catDetector, I);
 
 IFaces = insertObjectAnnotation(I, 'rectangle', bboxes, 'DOGE');   
 figure, imshow(IFaces), title('Detected dog');  
-
+ 
 [centers, radii, metric] = imfindcircles(I,[8 100]);
 
 
