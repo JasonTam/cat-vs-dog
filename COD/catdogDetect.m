@@ -11,18 +11,20 @@ dogDetector = vision.CascadeObjectDetector(...
 
 catDetector = vision.CascadeObjectDetector(strcat(dir_cat,'.xml'));
 	
-eyeDetector = vision.CascadeObjectDetector(...
-    'ClassificationModel','EyePairBig');
+catFaceDetector = vision.CascadeObjectDetector;
+catFaceDetector.ClassificationModel = 'catFace.xml';
+catFaceDetector.MergeThreshold = 300;
+catFaceDetector.ScaleFactor = 1.05;
 
+dogFaceDetector = vision.CascadeObjectDetector;
+dogFaceDetector.ClassificationModel = 'dogFace.xml';
+dogFaceDetector.MergeThreshold = 300;
+catFaceDetector.ScaleFactor = 1.05;
 
-I = imread('../data/cat.1.jpg');
+I = imread('../data/cat.0.jpg');
 
-bboxes = step(catDetector, I);
+bboxes = step(catFaceDetector, I);
 
-IFaces = insertObjectAnnotation(I, 'rectangle', bboxes, 'DOGE');   
-figure, imshow(IFaces), title('Detected dog');  
+IFaces = insertObjectAnnotation(I, 'rectangle', bboxes, 'FACE');   
+figure, imshow(IFaces), title('Detected object');  
  
-[centers, radii, metric] = imfindcircles(I,[8 100]);
-
-
-viscircles(centers, radii,'EdgeColor','b');

@@ -1,13 +1,30 @@
 % Train a Cascade Object Detector
+dB = 'oxford';
+
 
 %% Pathing
 addpath(genpath('../'));
-dir_dog = 'n02084071';
-dir_cat = 'n02121620';
+if strcmp(dB,'imagenet')
+    dir_dog = 'n02084071';
+    dir_cat = 'n02121620';
+end
+if strcmp(dB,'oxford')
+    dir_dog = 'dogFace';
+    dir_cat = 'catFace';
+end
 
 %% Adding Image Directories
-imDir_dog = fullfile(getPath('imagenet'),'dog',dir_dog,'/');
-imDir_cat = fullfile(getPath('imagenet'),'cat',dir_cat,'/');
+
+% Using ImageNet (general bbox)
+if strcmp(dB,'imagenet')
+    imDir_dog = fullfile(getPath('imagenet'),'dog',dir_dog,'/');
+    imDir_cat = fullfile(getPath('imagenet'),'cat',dir_cat,'/');
+end
+% Using Oxford (face bbox)
+if strcmp(dB,'oxford')
+    imDir_dog = fullfile(getPath('oxford'),'images','dog','/');
+    imDir_cat = fullfile(getPath('oxford'),'images','cat','/');
+end
 
 addpath(imDir_dog);
 addpath(imDir_cat);
@@ -17,8 +34,17 @@ addpath(imDir_cat);
 negativeFolder = fullfile(matlabroot,'toolbox','vision','visiondemos','non_stop_signs');
 
 %% Parse XML data
-annoPath_dog = strcat(getPath('imagenet'),'Annotation/',dir_dog,'/');
-annoPath_cat = strcat(getPath('imagenet'),'Annotation/',dir_cat,'/');
+% Using ImageNet (general bbox)
+if strcmp(dB,'imagenet')
+    annoPath_dog = strcat(getPath('imagenet'),'Annotation/',dir_dog,'/');
+    annoPath_cat = strcat(getPath('imagenet'),'Annotation/',dir_cat,'/');
+end
+% Using Oxford (face bbox)
+if strcmp(dB,'oxford')
+    annoPath_dog = fullfile(getPath('oxford'),'annotations','xmls','dog','/');
+    annoPath_cat = fullfile(getPath('oxford'),'annotations','xmls','cat','/');
+end
+
 
 anno_dog = parse_bbox(annoPath_dog);
 anno_cat = parse_bbox(annoPath_cat);
@@ -38,14 +64,16 @@ ind_name = strcmp(fieldnames(q),'name');    % index of the name field
 ind_bbox = strcmp(fieldnames(q),'bbox');    % index of the bbox field
 
 qc = struct2cell(q);
-diF = strcat(imDir_dog,qc(ind_name,:),'.JPEG');
+% diF = strcat(imDir_dog,qc(ind_name,:),'.JPEG');
+diF = strcat(imDir_dog,qc(ind_name,:),'');
 doBB = qc(ind_bbox,:);
 D = [diF;doBB];
 data_dog = cell2struct(D, rowHeadings, 1);
 
 q = cell2mat(anno_cat.data);
 qc = struct2cell(q);
-diF = strcat(imDir_cat,qc(ind_name,:),'.JPEG');
+% diF = strcat(imDir_cat,qc(ind_name,:),'.JPEG');
+diF = strcat(imDir_cat,qc(ind_name,:),'');
 doBB = qc(ind_bbox,:);
 D = [diF;doBB];
 data_cat = cell2struct(D, rowHeadings, 1);
