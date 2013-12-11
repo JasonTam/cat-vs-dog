@@ -174,6 +174,7 @@ if ~exist(conf.histPath) || conf.clobber
 
   hists = cat(2, hists{:}) ;
   save(conf.histPath, 'hists') ;
+  save(fullfile(conf.dataDir,'imageClass.mat'),'imageClass')
 else
   load(conf.histPath) ;
 end
