@@ -56,9 +56,9 @@ save('./results/DBN.mat','g')
 
 %%
 
-test.path = fullfile(getPath,'TEST_SET_FEATURES.mat');
-test.load = load(test.path);
-test.nameNum = str2double(test.load.names);
+testNamesPath = fullfile(getPath,'TEST_SET_NAMES.mat');
+load(testNamesPath);
+test.nameNum = str2double(names);
 
 guess = g>1;
 
