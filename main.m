@@ -5,7 +5,18 @@
 % -------------------------------
 
 %% 
-data.path = strcat(getPath,'train/');
+
+data.source = 'oxford';
+switch data.source
+    case 'data'
+        data.path = strcat(getPath,'train/');     % Train path for origset 
+    case 'imagenet'
+    case 'oxford'
+        data.path = fullfile(getPath(data.source),'images');
+        data.annoPath = fullfile(getPath(data.source),'annotations');
+        data.triPath = fullfile(data.annoPath,'trimaps');
+end
+
 
 data.dir = dir(fullfile(strcat(data.path,'*.jpg')));
 data.cell = struct2cell(data.dir);
